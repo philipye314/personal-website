@@ -33,13 +33,13 @@ export default function WorkExperience({ onSelect }) {
           >
             <div className="col-span-12 md:col-span-4">
               <span
-                className="font-label text-[10px] mb-2 block tracking-widest"
+                className="font-label text-[10px] mb-3 block tracking-widest"
                 style={{ color: pos.periodColor }}
               >
                 {pos.period}
               </span>
-              <h3 className="text-white font-bold text-2xl mb-1 group-hover:text-white/90 transition-colors">{pos.title}</h3>
-              <p className="font-label text-[10px] text-white/40 tracking-[0.1em]">{pos.company}</p>
+              <h3 className="text-white font-bold text-2xl mb-3 group-hover:text-white/90 transition-colors">{pos.title}</h3>
+              <p className="font-label text-[10px] tracking-[0.1em]" style={{ color: pos.periodColor }}>{pos.company}</p>
             </div>
             <div
               className={`col-span-12 md:col-span-8 border-l border-white/10 pl-12 ${pos.hoverBorderColor} transition-colors`}

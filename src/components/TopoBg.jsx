@@ -123,6 +123,44 @@ function extractClosedLoops(segs, minPoints = 28) {
   return loops
 }
 
+// ─── Arc-length parameterization ─────────────────────────────────────────────
+// Precompute cumulative distances so orbs advance by pixels/frame, not point
+// indices. This is what eliminates jitter — marching-squares points are
+// unevenly spaced (dense on steep slopes, sparse on flat ground), so index-
+// stepping causes visible speed variation.
+function buildLoopData(pts) {
+  const n = pts.length
+  const cumDist = new Float32Array(n)
+  let total = 0
+  for (let i = 0; i < n; i++) {
+    const j = (i + 1) % n
+    total += Math.hypot(pts[j][0] - pts[i][0], pts[j][1] - pts[i][1])
+    cumDist[i] = total
+  }
+  return { pts, cumDist, total }
+}
+
+// Sample a position `dist` pixels along the loop (wraps automatically)
+function sampleLoop(loop, dist) {
+  const d = ((dist % loop.total) + loop.total) % loop.total
+  const cd = loop.cumDist
+  // Binary search for the segment containing d
+  let lo = 0, hi = cd.length - 1
+  while (lo < hi) {
+    const mid = (lo + hi) >>> 1
+    if (cd[mid] < d) lo = mid + 1
+    else hi = mid
+  }
+  const prev = lo > 0 ? cd[lo - 1] : 0
+  const seg  = cd[lo] - prev
+  const f    = seg > 0.001 ? (d - prev) / seg : 0
+  const j    = (lo + 1) % loop.pts.length
+  return [
+    loop.pts[lo][0] + (loop.pts[j][0] - loop.pts[lo][0]) * f,
+    loop.pts[lo][1] + (loop.pts[j][1] - loop.pts[lo][1]) * f,
+  ]
+}
+
 // ─── Color helpers ────────────────────────────────────────────────────────────
 const PALETTE = [
   '#00e5ff', // vivid cyan
@@ -187,7 +225,8 @@ export default function TopoBg() {
       allLoops.push(...extractClosedLoops(segs))
     }
 
-    // Keep loops in the visible area (above bottom fade), sort largest first
+    // Keep loops in the visible area (above bottom fade), sort largest first,
+    // then convert each to arc-length parameterized form
     const closedLoops = allLoops
       .filter(loop => {
         const avgY = loop.reduce((s, p) => s + p[1], 0) / loop.length
@@ -195,6 +234,7 @@ export default function TopoBg() {
       })
       .sort((a, b) => b.length - a.length)
       .slice(0, 20)
+      .map(buildLoopData)
 
     return { contoursByThreshold, closedLoops, lightX, lightY }
   }, [])
@@ -205,46 +245,37 @@ export default function TopoBg() {
     const pickLoop  = () => closedLoops[Math.floor(Math.random() * closedLoops.length)]
     const pickColor = () => PALETTE[Math.floor(Math.random() * PALETTE.length)]
 
-    // Reset an orb to a fresh spawning state on a random loop
+    // Reset an orb onto a random loop, advancing by pixels/frame (arc-length)
     const respawn = (orb) => {
-      orb.loop         = pickLoop()
-      orb.t            = Math.random() * orb.loop.length
-      orb.speed        = 0.02 + Math.random() * 0.13      // wide range: slow crawl → steady drift
-      orb.fromColor    = pickColor()
-      orb.toColor      = pickColor()
-      orb.colorT       = 0
-      orb.colorSpeed   = 0.003 + Math.random() * 0.003    // 3–6s per color change
-      orb.phase        = 'spawning'
-      orb.opacity      = 0
-      orb.lifetime     = 300 + Math.random() * 420        // 5–12s alive
-      orb.lifeT        = 0
-      orb.fadeInFrames  = 25 + Math.random() * 55         // 0.4–1.3s fade in
-      orb.fadeOutFrames = 25 + Math.random() * 55         // 0.4–1.3s fade out
+      orb.loop          = pickLoop()
+      orb.dist          = Math.random() * orb.loop.total  // start anywhere on loop
+      orb.speed         = 0.15 + Math.random() * 0.45    // px/frame: ~9–36 px/s at 60fps
+      orb.fromColor     = pickColor()
+      orb.toColor       = pickColor()
+      orb.colorT        = 0
+      orb.colorSpeed    = 0.003 + Math.random() * 0.003  // 3–6s per color change
+      orb.phase         = 'spawning'
+      orb.opacity       = 0
+      orb.lifetime      = 600 + Math.random() * 660      // 10–21s alive
+      orb.lifeT         = 0
+      orb.fadeInFrames  = 40 + Math.random() * 60        // 0.7–1.7s
+      orb.fadeOutFrames = 40 + Math.random() * 60        // 0.7–1.7s
     }
 
-    // Initialise all orbs, staggered so they aren't all in the same phase at load
+    // Initialise orbs staggered across lifecycle phases so the screen isn't empty at load
     orbStateRef.current = Array.from({ length: NUM_ORBS }, () => {
       const orb = {}
       respawn(orb)
-
-      // Randomly drop each orb into a mid-life phase so the screen isn't empty at start
       const r = Math.random()
       if (r < 0.5) {
-        // Already alive somewhere in the middle of its life
-        orb.phase   = 'alive'
-        orb.opacity = 0.88
-        orb.lifeT   = Math.random() * orb.lifetime
+        orb.phase = 'alive'; orb.opacity = 0.88
+        orb.lifeT = Math.random() * orb.lifetime
       } else if (r < 0.75) {
-        // Mid fade-in
-        orb.phase   = 'spawning'
-        orb.opacity = Math.random() * 0.88
+        orb.phase = 'spawning'; orb.opacity = Math.random() * 0.88
       } else {
-        // Mid fade-out
-        orb.phase   = 'dying'
-        orb.opacity = Math.random() * 0.88
-        orb.lifeT   = orb.lifetime
+        orb.phase = 'dying'; orb.opacity = Math.random() * 0.88
+        orb.lifeT = orb.lifetime
       }
-
       orb.respawn = respawn
       return orb
     })
@@ -258,30 +289,21 @@ export default function TopoBg() {
         if (orb.phase === 'spawning') {
           orb.opacity += 0.88 / orb.fadeInFrames
           if (orb.opacity >= 0.88) { orb.opacity = 0.88; orb.phase = 'alive' }
-
         } else if (orb.phase === 'alive') {
           orb.lifeT++
           if (orb.lifeT >= orb.lifetime) orb.phase = 'dying'
-
         } else if (orb.phase === 'dying') {
           orb.opacity -= 0.88 / orb.fadeOutFrames
           if (orb.opacity <= 0) {
-            orb.opacity = 0
             el.setAttribute('opacity', '0')
-            orb.respawn(orb)   // immediately begin fresh cycle
+            orb.respawn(orb)
             return
           }
         }
 
-        // ── Position ─────────────────────────────────────────────────────────
-        orb.t += orb.speed
-        if (orb.t >= orb.loop.length) orb.t -= orb.loop.length
-
-        const idx = Math.floor(orb.t) % orb.loop.length
-        const nxt = (idx + 1) % orb.loop.length
-        const f   = orb.t - Math.floor(orb.t)
-        const x   = orb.loop[idx][0] + (orb.loop[nxt][0] - orb.loop[idx][0]) * f
-        const y   = orb.loop[idx][1] + (orb.loop[nxt][1] - orb.loop[idx][1]) * f
+        // ── Position — advance by pixels, sample via arc-length lookup ────────
+        orb.dist += orb.speed
+        const [x, y] = sampleLoop(orb.loop, orb.dist)
 
         if (x < -60 || x > VW + 60 || y < -60 || y > VH + 60) {
           orb.respawn(orb); return

@@ -5,8 +5,8 @@ export default function Hero() {
         <span className="font-label text-[10px] uppercase tracking-[0.2em] text-secondary mb-6 block">
           System Initialization // 2024
         </span>
-        <h1 className="text-[5rem] font-headline font-bold leading-[1] tracking-[-0.04em] mb-8">
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-white/40">
+        <h1 className="text-[4rem] font-headline font-bold leading-[1] tracking-[-0.04em] mb-8">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-white/90">
             Hi, I'm{' '}
           </span>
           <span className="text-transparent bg-clip-text bg-gradient-to-br from-secondary via-white to-tertiary-fixed-dim">
