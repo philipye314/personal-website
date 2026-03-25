@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+}
+
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+.mask-fade-right {
+  mask-image: linear-gradient(to right, black 80%, transparent 100%);
+}
+
+.section-line {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 4rem;
+}
+
+.section-line::after {
+  content: '';
+  flex-grow: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  margin-left: 1.5rem;
+}
+
+.topo-bg {
+  background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCgaFM8XlStr7rOs-DEZvYvWp-F7OCksP9gUd_Xzx9VZympmJHOblL8ckmEGLnmTwNOOxxT00uAE9ENTwfJUXetkfhWssrq9nfNoM2kVPXalvsOlKzALymNNR15G86BA4k6VPigKagOD-vs37oDvf9vs0qPGpIwimxKnY9S574A5NDCoTYu7YXQB7inUdqJWqvN0LD7o4GGgNTGk07c3SsdZJjMQwZnZ_buKvIl7DO90nhpz5PCBjFEtSjyQjYA4HGmJZuCKv_eTrY5');
+  background-size: 150%;
+  background-repeat: repeat-x;
+  background-position: top center;
+  filter: grayscale(1) brightness(0.2) contrast(1.2);
+  transform: scaleX(2);
+}
+
+.point-light {
+  background: radial-gradient(circle at 50% 30%, rgba(255,255,255,0.12) 0%, transparent 70%);
+}
