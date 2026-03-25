@@ -32,7 +32,7 @@ export default function NavBar() {
     <nav className="fixed top-0 w-full z-50 bg-[#111111]/80 backdrop-blur-xl">
       <div className="flex justify-between items-center px-8 py-4 max-w-7xl mx-auto">
         <div className="font-['Geist_Mono'] font-bold text-xl tracking-tighter text-white">
-          ARCHITECT.V1
+          phils website
         </div>
         <div className="hidden md:flex gap-8 items-center font-['Geist_Mono'] font-medium tracking-tight text-xs uppercase">
           {sections.map(({ id, number, label }) => {
