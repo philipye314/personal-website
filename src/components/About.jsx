@@ -2,7 +2,7 @@ export default function About() {
   return (
     <section className="grid grid-cols-12 gap-12 mb-40 items-start">
       <div className="col-span-12 md:col-span-5">
-        <div className="aspect-square relative rounded-xl overflow-hidden grayscale hover:grayscale-0 transition-all duration-700">
+        <div className="aspect-square relative rounded-xl overflow-hidden grayscale">
           <img
             alt="Architectural Abstract"
             className="object-cover w-full h-full"

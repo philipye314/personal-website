@@ -1,25 +1,51 @@
+import { useEffect, useRef } from 'react'
+
 const skills = [
-  { icon: 'layers', label: 'Kubernetes', glowClass: 'bg-secondary/10 group-hover/card:bg-secondary/20', iconClass: 'text-secondary' },
-  { icon: 'database', label: 'PostgreSQL', glowClass: 'bg-tertiary/10 group-hover/card:bg-tertiary/20', iconClass: 'text-tertiary' },
-  { icon: 'cloud', label: 'AWS Cloud', glowClass: 'bg-secondary-container/10 group-hover/card:bg-secondary-container/20', iconClass: 'text-secondary-container' },
-  { icon: 'data_object', label: 'TypeScript', glowClass: 'bg-tertiary-fixed-dim/10 group-hover/card:bg-tertiary-fixed-dim/20', iconClass: 'text-tertiary-fixed-dim' },
-  { icon: 'flutter', label: 'React Native', glowClass: 'bg-error/10 group-hover/card:bg-error/20', iconClass: 'text-error' },
-  { icon: 'memory', label: 'Golang', glowClass: 'bg-secondary-fixed-dim/10 group-hover/card:bg-secondary-fixed-dim/20', iconClass: 'text-secondary-fixed-dim' },
+  { icon: 'layers',      label: 'Kubernetes',    glowClass: 'bg-secondary/10 group-hover/card:bg-secondary/20',                   iconClass: 'text-secondary' },
+  { icon: 'database',    label: 'PostgreSQL',    glowClass: 'bg-tertiary/10 group-hover/card:bg-tertiary/20',                     iconClass: 'text-tertiary' },
+  { icon: 'cloud',       label: 'AWS Cloud',     glowClass: 'bg-secondary-container/10 group-hover/card:bg-secondary-container/20', iconClass: 'text-secondary-container' },
+  { icon: 'data_object', label: 'TypeScript',    glowClass: 'bg-tertiary-fixed-dim/10 group-hover/card:bg-tertiary-fixed-dim/20', iconClass: 'text-tertiary-fixed-dim' },
+  { icon: 'flutter',     label: 'React Native',  glowClass: 'bg-error/10 group-hover/card:bg-error/20',                           iconClass: 'text-error' },
+  { icon: 'memory',      label: 'Golang',        glowClass: 'bg-secondary-fixed-dim/10 group-hover/card:bg-secondary-fixed-dim/20', iconClass: 'text-secondary-fixed-dim' },
 ]
 
+// Triple the list so there's always enough content to fill any screen width
+// and the loop reset is invisible (we animate to -1/3 of total width, then reset)
+const loopedSkills = [...skills, ...skills, ...skills]
+
 export default function Skills() {
+  const trackRef = useRef(null)
+  const posRef   = useRef(0)
+  const rafRef   = useRef(null)
+
+  useEffect(() => {
+    const track = trackRef.current
+    if (!track) return
+
+    const oneThird = track.scrollWidth / 3
+
+    const animate = () => {
+      posRef.current += 0.4
+      if (posRef.current >= oneThird) posRef.current -= oneThird
+      track.style.transform = `translateX(-${posRef.current}px)`
+      rafRef.current = requestAnimationFrame(animate)
+    }
+
+    rafRef.current = requestAnimationFrame(animate)
+    return () => cancelAnimationFrame(rafRef.current)
+  }, [])
+
   return (
     <section className="mb-32">
-      <div className="relative group">
-        <div className="flex overflow-x-auto hide-scrollbar gap-4 pb-8 mask-fade-right">
-          {skills.map((skill) => (
+      {/* overflow-hidden clips the track; mask fades both edges */}
+      <div className="overflow-hidden mask-fade-both">
+        <div ref={trackRef} className="flex gap-4 pb-8 w-max">
+          {loopedSkills.map((skill, idx) => (
             <div
-              key={skill.label}
+              key={idx}
               className="flex-shrink-0 w-48 h-28 bg-white/[0.02] border border-white/5 rounded-lg p-5 flex flex-col justify-between overflow-hidden relative group/card"
             >
-              <div
-                className={`absolute -right-4 -bottom-4 w-16 h-16 blur-2xl transition-all ${skill.glowClass}`}
-              ></div>
+              <div className={`absolute -right-4 -bottom-4 w-16 h-16 blur-2xl transition-all ${skill.glowClass}`} />
               <span className={`material-symbols-outlined text-xl ${skill.iconClass}`}>
                 {skill.icon}
               </span>
