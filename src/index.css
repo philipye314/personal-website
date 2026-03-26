@@ -49,6 +49,14 @@ html {
   margin-left: 1.5rem;
 }
 
+html.light .section-line::after {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+html.light .topo-bg {
+  filter: grayscale(1) brightness(1.1) contrast(0.6) invert(1);
+}
+
 .topo-bg {
   background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCgaFM8XlStr7rOs-DEZvYvWp-F7OCksP9gUd_Xzx9VZympmJHOblL8ckmEGLnmTwNOOxxT00uAE9ENTwfJUXetkfhWssrq9nfNoM2kVPXalvsOlKzALymNNR15G86BA4k6VPigKagOD-vs37oDvf9vs0qPGpIwimxKnY9S574A5NDCoTYu7YXQB7inUdqJWqvN0LD7o4GGgNTGk07c3SsdZJjMQwZnZ_buKvIl7DO90nhpz5PCBjFEtSjyQjYA4HGmJZuCKv_eTrY5');
   background-size: 150%;
@@ -75,3 +83,80 @@ html {
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
+/* ─── LIGHT MODE ─────────────────────────────────────────────────────────────
+   Overrides for all hardcoded dark Tailwind utilities.
+   Applied when <html class="light"> is set.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* Page backgrounds */
+html.light .bg-\[\#111111\]    { background-color: #f5f5f0 !important; }
+html.light .bg-\[\#0d0d0d\]    { background-color: #e8e8e4 !important; }
+html.light .bg-\[\#1a1a1a\]    { background-color: #e4e4e0 !important; }
+html.light .bg-black\/80       { background-color: rgba(245,245,240,0.92) !important; }
+html.light .bg-black\/50       { background-color: rgba(0,0,0,0.04) !important; }
+html.light .bg-black\/40       { background-color: rgba(0,0,0,0.03) !important; }
+html.light .bg-black\/20       { background-color: rgba(0,0,0,0.02) !important; }
+
+/* Navbar backdrop (bg-[#111111]/80) */
+html.light .bg-\[\#111111\]\/80 { background-color: rgba(245,245,240,0.92) !important; }
+
+/* Subtle white overlays → dark overlays */
+html.light .bg-white\/\[0\.02\]  { background-color: rgba(0,0,0,0.03) !important; }
+html.light .bg-white\/\[0\.015\] { background-color: rgba(0,0,0,0.025) !important; }
+html.light .bg-white\/\[0\.025\] { background-color: rgba(0,0,0,0.03) !important; }
+html.light .bg-white\/\[0\.01\]  { background-color: rgba(0,0,0,0.01) !important; }
+html.light .bg-white\/\[0\.05\]  { background-color: rgba(0,0,0,0.05) !important; }
+html.light .bg-white\/\[0\.04\]  { background-color: rgba(0,0,0,0.04) !important; }
+html.light .bg-white\/5          { background-color: rgba(0,0,0,0.04) !important; }
+html.light .bg-white\/10         { background-color: rgba(0,0,0,0.06) !important; }
+
+/* Tailwind named colors */
+html.light .bg-surface           { background-color: #f5f5f0 !important; }
+html.light .bg-background        { background-color: #f5f5f0 !important; }
+html.light .bg-surface-container-low  { background-color: #eaeae6 !important; }
+html.light .bg-surface-container-high { background-color: #e4e4e0 !important; }
+html.light .bg-surface-container      { background-color: #efefeb !important; }
+
+/* ── Text ──────────────────────────────────────────────────────────────────── */
+html.light .text-white          { color: #111111 !important; }
+html.light .text-on-surface     { color: #1a1a1a !important; }
+
+/* text-on-surface opacity variants */
+html.light .text-on-surface\/70 { color: rgba(26,26,26,0.75) !important; }
+html.light .text-on-surface\/65 { color: rgba(26,26,26,0.70) !important; }
+html.light .text-on-surface\/60 { color: rgba(26,26,26,0.65) !important; }
+html.light .text-on-surface\/55 { color: rgba(26,26,26,0.60) !important; }
+html.light .text-on-surface\/50 { color: rgba(26,26,26,0.55) !important; }
+html.light .text-on-surface\/45 { color: rgba(26,26,26,0.50) !important; }
+
+/* text-white opacity variants */
+html.light .text-white\/70  { color: rgba(17,17,17,0.75) !important; }
+html.light .text-white\/60  { color: rgba(17,17,17,0.65) !important; }
+html.light .text-white\/45  { color: rgba(17,17,17,0.55) !important; }
+html.light .text-white\/40  { color: rgba(17,17,17,0.50) !important; }
+html.light .text-white\/35  { color: rgba(17,17,17,0.45) !important; }
+html.light .text-white\/30  { color: rgba(17,17,17,0.40) !important; }
+html.light .text-white\/28  { color: rgba(17,17,17,0.38) !important; }
+html.light .text-white\/25  { color: rgba(17,17,17,0.35) !important; }
+html.light .text-white\/22  { color: rgba(17,17,17,0.32) !important; }
+html.light .text-white\/20  { color: rgba(17,17,17,0.30) !important; }
+html.light .text-white\/15  { color: rgba(17,17,17,0.25) !important; }
+
+/* ── Borders ───────────────────────────────────────────────────────────────── */
+html.light .border-white\/20         { border-color: rgba(0,0,0,0.15) !important; }
+html.light .border-white\/10         { border-color: rgba(0,0,0,0.10) !important; }
+html.light .border-white\/5          { border-color: rgba(0,0,0,0.06) !important; }
+html.light .border-white\/\[0\.1\]   { border-color: rgba(0,0,0,0.10) !important; }
+html.light .border-white\/\[0\.08\]  { border-color: rgba(0,0,0,0.09) !important; }
+html.light .border-white\/\[0\.07\]  { border-color: rgba(0,0,0,0.08) !important; }
+html.light .border-white\/\[0\.06\]  { border-color: rgba(0,0,0,0.07) !important; }
+html.light .border-white\/\[0\.05\]  { border-color: rgba(0,0,0,0.06) !important; }
+html.light .border-white\/\[0\.04\]  { border-color: rgba(0,0,0,0.05) !important; }
+
+/* ── Divider lines (bg used as 1px lines) ──────────────────────────────────── */
+html.light .bg-white\/\[0\.07\] { background-color: rgba(0,0,0,0.07) !important; }
+html.light .bg-white\/\[0\.08\] { background-color: rgba(0,0,0,0.08) !important; }
+
+/* ── SVG & icon colors ─────────────────────────────────────────────────────── */
+html.light .text-white\/10 { color: rgba(0,0,0,0.08) !important; }

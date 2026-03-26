@@ -13,18 +13,20 @@ export default function About() {
       </div>
       <div className="col-span-12 md:col-span-7 pt-4">
         <h2 className="text-3xl font-headline font-bold text-white mb-8 tracking-tight">
-          DESIGN PHILOSOPHY
+          BACKGROUND
         </h2>
         <div className="space-y-6 text-on-surface/60 leading-relaxed text-lg font-light">
           <p>
-            Software is the modern concrete. I approach digital products with the mindset of an
-            architect: structural integrity first, followed by an uncompromising commitment to
-            aesthetic minimalism.
+            Computer Science student at UC Berkeley graduating in 2026, with a focus on systems
+            engineering, full-stack development, and AI infrastructure. Experienced building and
+            shipping production systems at NVIDIA and leading cross-functional engineering teams
+            from zero to deployment.
           </p>
           <p>
-            Every line of code should serve a purpose. Every pixel should be intentional. My work
-            focuses on removing the noise until only the essential remains, creating interfaces that
-            feel as solid as obsidian and as light as air.
+            I write clean, efficient code across the full stack — from distributed backend services
+            in Python, Go, and Rust to production-grade frontend products in React and TypeScript.
+            Deeply interested in the intersection of AI tooling, developer productivity, and
+            production reliability at scale.
           </p>
         </div>
       </div>

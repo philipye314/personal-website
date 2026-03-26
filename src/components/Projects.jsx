@@ -22,35 +22,46 @@ function Tag({ label, color }) {
   )
 }
 
-export default function Projects() {
+export default function Projects({ onSelect }) {
   return (
     <section className="mb-40">
-      <div className="space-y-24">
-        {projects.map((project) => (
-          <div key={project.title} className="grid grid-cols-12 gap-8 items-start group">
-            <div className="col-span-12 md:col-span-4">
-              <h3 className="text-white font-bold text-2xl mb-1">{project.title}</h3>
-              <p
-                className="font-label text-[10px] tracking-[0.1em] uppercase"
-                style={{ color: project.subtitleColor }}
-              >
-                {project.subtitle}
-              </p>
-            </div>
+      <div>
+        {projects.map((project, idx) => (
+          <div key={project.title}>
             <div
-              className={`col-span-12 md:col-span-8 group-hover:border-tertiary-container/50 transition-colors ${
-                project.borderTop ? 'border-t border-white/10 pt-8' : ''
-              }`}
+              onClick={() => onSelect?.(project.slug)}
+              className="grid grid-cols-12 gap-8 items-start group cursor-pointer py-14"
             >
-              <p className="text-on-surface/60 leading-relaxed text-lg font-light mb-6">
-                {project.description}
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {project.tags.map((tag) => (
-                  <Tag key={tag.label} {...tag} />
-                ))}
+              <div className="col-span-12 md:col-span-4">
+                <h3 className="text-white font-bold text-2xl mb-1">{project.title}</h3>
+                <p
+                  className="font-label text-[10px] tracking-[0.1em] uppercase"
+                  style={{ color: project.subtitleColor }}
+                >
+                  {project.subtitle}
+                </p>
+              </div>
+              <div className="col-span-12 md:col-span-8 transition-colors">
+                <p className="text-on-surface/60 leading-relaxed text-lg font-light mb-6">
+                  {project.description}
+                </p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {project.tags.map((tag) => (
+                    <Tag key={tag.label} {...tag} />
+                  ))}
+                </div>
+                <span
+                  className="font-label text-[10px] tracking-widest opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-2"
+                  style={{ color: project.subtitleColor }}
+                >
+                  VIEW PROJECT
+                  <span className="inline-block translate-x-0 group-hover:translate-x-1 transition-transform duration-300">→</span>
+                </span>
               </div>
             </div>
+            {idx < projects.length - 1 && (
+              <div className="h-px bg-white/[0.08]" />
+            )}
           </div>
         ))}
       </div>

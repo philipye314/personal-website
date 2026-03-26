@@ -7,7 +7,7 @@ const sections = [
   { id: 'stack', number: '04', label: 'Skills' },
 ]
 
-export default function NavBar() {
+export default function NavBar({ isDark, onToggleTheme }) {
   const [active, setActive] = useState('about')
 
   useEffect(() => {
@@ -64,6 +64,15 @@ export default function NavBar() {
           </button>
           <button className="hover:bg-white/10 rounded-sm transition-all p-2 text-white active:scale-95 duration-200">
             <span className="material-symbols-outlined">code</span>
+          </button>
+          <button
+            onClick={onToggleTheme}
+            className="hover:bg-white/10 rounded-sm transition-all p-2 text-white active:scale-95 duration-200"
+            title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
+            <span className="material-symbols-outlined">
+              {isDark ? 'light_mode' : 'dark_mode'}
+            </span>
           </button>
         </div>
       </div>

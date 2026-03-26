@@ -37,8 +37,14 @@ export default function Skills() {
               key={idx}
               className="flex-shrink-0 w-48 h-28 bg-white/[0.02] border border-white/5 rounded-lg p-5 flex flex-col justify-between overflow-hidden relative group/card"
             >
-              <div className={`absolute -right-4 -bottom-4 w-16 h-16 blur-2xl transition-all ${skill.glowClass}`} />
-              <span className={`material-symbols-outlined text-xl ${skill.iconClass}`}>
+              <div
+                className="absolute -right-4 -bottom-4 w-16 h-16 blur-2xl transition-opacity opacity-10 group-hover/card:opacity-20"
+                style={{ background: skill.color }}
+              />
+              <span
+                className="material-symbols-outlined text-xl"
+                style={{ color: skill.color }}
+              >
                 {skill.icon}
               </span>
               <span className="font-label text-xs font-semibold text-white tracking-widest uppercase">

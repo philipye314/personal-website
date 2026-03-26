@@ -7,8 +7,8 @@ export default function WorkExperience({ onSelect }) {
         {positions.map((pos) => (
           <div
             key={pos.company}
-            onClick={() => onSelect?.(pos.slug)}
-            className="grid grid-cols-12 gap-8 items-start group cursor-pointer"
+            onClick={() => !pos.noDetail && onSelect?.(pos.slug)}
+            className={`grid grid-cols-12 gap-8 items-start group ${pos.noDetail ? 'cursor-default' : 'cursor-pointer'}`}
           >
             <div className="col-span-12 md:col-span-4">
               <span
@@ -26,13 +26,15 @@ export default function WorkExperience({ onSelect }) {
               <p className="text-on-surface/60 leading-relaxed text-lg font-light mb-5">
                 {pos.description}
               </p>
-              <span
-                className="font-label text-[10px] tracking-widest opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-2"
-                style={{ color: pos.periodColor }}
-              >
-                VIEW CASE STUDY
-                <span className="inline-block translate-x-0 group-hover:translate-x-1 transition-transform duration-300">→</span>
-              </span>
+              {!pos.noDetail && (
+                <span
+                  className="font-label text-[10px] tracking-widest opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-2"
+                  style={{ color: pos.periodColor }}
+                >
+                  VIEW CASE STUDY
+                  <span className="inline-block translate-x-0 group-hover:translate-x-1 transition-transform duration-300">→</span>
+                </span>
+              )}
             </div>
           </div>
         ))}
